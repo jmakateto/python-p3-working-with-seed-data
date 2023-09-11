@@ -1,6 +1,12 @@
-from sqlalchemy import func
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# Define the database connection URL and create the engine
+DB_URL = "sqlite:///games.db"  
+engine = create_engine(DB_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
@@ -14,8 +20,3 @@ class Game(Base):
     price = Column(Integer())
     created_at = Column(DateTime(), server_default=func.now())
     updated_at = Column(DateTime(), onupdate=func.now())
-
-    def __repr__(self):
-        return f'Game(id={self.id}, ' + \
-            f'title="{self.title}", ' + \
-            f'platform="{self.platform})"'
